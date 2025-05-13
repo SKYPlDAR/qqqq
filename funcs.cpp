@@ -1,7 +1,7 @@
 #include <fstream>
 #include "Z.h"
 #include <math.h>
-                            //exit(EXIT_SUCCESS);
+
 using namespace std;
 
 ostream& operator<<(ostream& os, const nm::jets& Jets){
@@ -14,16 +14,25 @@ istream& operator>>(istream& is, nm::jets& Jets){
     return is;
 }
 
+
+void nm::chek(string a){
+    ifstream f(a);
+    f.open(a);
+    if(!f.is_open()){
+    cout << "Файл, необходимый для работы, не найден. Создается новый файл:"<<a<<" \n";
+    ofstream f(a);
+            if (f.is_open()){
+                cout<< "Не удалось создать файл. Программа будет завершена"<<endl;
+                exit(EXIT_FAILURE);
+            } }
+    f.close();
+    }
+
 void nm::display(string a){
     string line;
     ifstream f;
     f.open(a); // окрываем файл
-    if(!f.is_open()){
-        cout << "Файл не найден. Создается новый файл: " << a << "\n";
-        ofstream f(a);
-        cout<< "Файл пуст"<<endl;
-        f.close();
-    return;}
+    if(!f.is_open()) fatal();
     bool flag = true;
     int b=0;
     if(a=="jets.txt"){
@@ -49,8 +58,7 @@ void nm::searchJET(){
     jets editable;
     ifstream f;
     f.open("jets.txt");
-    if(!f.is_open())
-        return;
+    if(!f.is_open()) fatal();
     while(f >> editable){
         if(editable.model == Model){
             cout << editable.model << " " << editable.pilot<< " " << editable.range << " " << editable.speed << " "<<editable.status<< " " <<editable.time <<" " <<editable.x<<" " <<editable.y <<" " <<editable.timeEnd<< endl;
@@ -61,8 +69,14 @@ void nm::searchJET(){
 
 void nm::addJET(){
     jets editable;
-    cout << "Введите название самолета, имя пилота, скорость самолета" << endl;
-    cin >> editable.model >> editable.pilot >> editable.speed;
+    cout << "Введите название самолета" << endl;
+    cin >> editable.model;
+    cout << "Введите имя пилота" << endl;
+    cin >> editable.pilot;
+    cout << "Введите скорость самолета" << endl;
+    if (!(cin >> editable.speed)||(editable.speed<=0)) {
+                cout << "Ошибка при вводе скорости" <<endl; 
+            return;}
     fstream f;
     editable.range = "no";
     editable.status = 0;
@@ -71,9 +85,7 @@ void nm::addJET(){
     editable.y=0;
     editable.timeEnd=0;
     f.open("jets.txt", ios::app | ios::ate);
-    if(!f.is_open()){
-        cout << "Не удалось открыть файл." << endl;
-        return;}
+    if(!f.is_open()) fatal();
     f << editable.model << " " << editable.pilot << " " << editable.range << " " << editable.speed << " "<< editable.status << " " << editable.time <<" "<<editable.x<<" "<< editable.y<<" "<<editable.timeEnd<< endl;
     f.close();
 }
@@ -88,8 +100,7 @@ void nm::delJET(){
     cin >> editable;
     ofstream fwrite;
     fwrite.open("jets.txt");
-    if(!fwrite.is_open())
-        return;
+    if(!fwrite.is_open()) fatal();
     for(int n = 0; n < i; n++){
         if((arr[n].model != editable.model) || (arr[n].pilot != editable.pilot) || (arr[n].range != editable.range) || (arr[n].speed != editable.speed)|| (arr[n].status != editable.status)|| (arr[n].time != editable.time)|| (arr[n].x!= editable.x)|| (arr[n].y != editable.y)|| (arr[n].timeEnd != editable.timeEnd)){
             fwrite << arr[n].model << " " << arr[n].pilot << " " << arr[n].range << " " << arr[n].speed << " " << arr[n].status<< " " << arr[n].time<<" "<<arr[n].x<<" "<<arr[n].y<<" "<<arr[n].timeEnd<< endl;
@@ -115,8 +126,7 @@ void nm::searchROU(){
     routes editable;
     ifstream f;
     f.open("routes.txt");
-    if(!f.is_open())
-        return;
+    if(!f.is_open()) fatal();
     while(f >> editable){
         if(editable.name == name){
             cout << editable.name << " " << editable.startX << " " << editable.startY << " " << editable.endX << " " << editable.endY << endl;
@@ -126,13 +136,32 @@ void nm::searchROU(){
 }
 
 void nm::addROU(){
-    cout << "Название маршрута, координаты начала (x, y), координаты конца (x, y)" << endl;
+    cout << "Введите название маршрута" << endl;
     routes editable;
-    cin >> editable;
+    cin >> editable.name;
+    cout << "Введите координату начала по х" << endl;
+    if (!(cin >> editable.startX)){
+        cout<<"Некорректный ввод"<<endl;
+        return;
+    }
+    cout << "Введите координату начала по у" << endl;
+    if (!(cin >> editable.startY)){
+        cout<<"Некорректный ввод"<<endl;
+        return;
+    }
+    cout << "Введите координату конца по х" << endl;
+    if (!(cin >> editable.endX)){
+        cout<<"Некорректный ввод"<<endl;
+        return;
+    }
+    cout << "Введите координату конца по у" << endl;
+    if (!(cin >> editable.endY)){
+        cout<<"Некорректный ввод"<<endl;
+        return;
+    }
     fstream f;
     f.open("routes.txt", ios::app | ios::ate);
-    if(!f.is_open())
-        return;
+    if(!f.is_open()) fatal();
     f << editable.name << " " << editable.startX << " " << editable.startY << " " << editable.endX << " " << editable.endY << endl;
     f.close();
 }
@@ -147,8 +176,7 @@ void nm::delROU(){
     cin >> editable;
     ofstream fwrite;
     fwrite.open("routes.txt");
-    if(!fwrite.is_open())
-        return;
+    if(!fwrite.is_open()) fatal();
     for(int n = 0; n < i; n++){
         if((arr[n].name != editable.name) || (arr[n].startX != editable.startX) || (arr[n].startY != editable.startY) || (arr[n].endX != editable.endX) || (arr[n].endY != editable.endY)){
             fwrite << arr[n].name << " " << arr[n].startX << " " << arr[n].startY << " " << arr[n].endX << " " << arr[n].endY << endl;
@@ -162,8 +190,7 @@ int nm::arr_s(string f_name){
     int i = 0;
     ifstream fread;
     fread.open(f_name);
-    if(!fread.is_open())
-        return;
+    if(!fread.is_open()) fatal();
     while(getline(fread, line)){
         i++;
     }
@@ -174,34 +201,31 @@ int nm::arr_s(string f_name){
 void nm::array(int i, string f_name, routes*arr){
     ifstream fread;
     fread.open(f_name);
-    if(!fread.is_open())
-        return;
+    if(!fread.is_open()) fatal();
     routes editable;
     for(int n = 0; n < i; n++){
         fread >> editable;
         arr[n] = editable;
     }
     fread.close();
-    routes editable;
-    cout << "Enter name, start(x,y), end(x,y)" << endl;
-    cin >> editable;
+
 }
 
 void nm::array(int i, string f_name, jets*arr){
     ifstream fread;
     fread.open(f_name);
-    if(!fread.is_open())
-        return;
+    if(!fread.is_open()) fatal();
     jets editable;
     for(int n = 0; n < i; n++){
         fread >> editable;
         arr[n] = editable;
     }
     fread.close();
-    jets editable;
-    cout << "Enter name, start(x,y), end(x,y)" << endl;
-    cin >> editable;
+
 }
+void nm::fatal(){
+        cout<< "Ошибка открытия файла. Программа будет завершена"<<endl;
+        exit(EXIT_FAILURE);}
 
 void nm::vylet(){
     int j = arr_s("routes.txt");
@@ -214,17 +238,21 @@ void nm::vylet(){
 
     cout<< "Введите индекс желаемого маршрута для вылета"<<endl;
     int a;
-    cin >>a;
+    if (!(cin >> a)||(a<=0)||(a>=j)) {
+            cout << "Данного маршрута не существует" <<endl; 
+            return;
+        }
 
     cout<<"Введите индекс свободного самолета, отправляемого в путь"<<endl;
     int index;
-    cin >> index;
-    if(index>=i){
-        cout<<"Данного самолета не существует"<<endl;
-        return;
-    }
-    if(arr[index].status) 
+    if (!(cin >> index)||(index<=0)||(index>=i)) {
+            cout << "Данного самолета не существует" <<endl; 
+            return;
+        }
+    if(arr[index].status) {
     cout<< "Данный самолет уже находится в рейсе" <<endl;
+    return;
+    }
     else {
         arr[index].status=1;
         arr[index].range=arr1[a].name;
@@ -235,9 +263,7 @@ void nm::vylet(){
     }
     ofstream fwrite;
     fwrite.open("jets.txt");
-    if(!fwrite.is_open()){
-    cout<<"Не удалось открыть файл"<<endl;
-        return;}
+    if(!fwrite.is_open()) fatal(); 
     for(int n = 0; n < i; n++){
             fwrite << arr[n].model << " " << arr[n].pilot << " " << arr[n].range << " " << arr[n].speed << " " << arr[n].status<< " " << arr[n].time<<" "<< arr[n].x<<" "<<arr[n].y<<" "<<arr[n].timeEnd<< endl;
         }
@@ -256,13 +282,13 @@ void nm::time(){
 
     cout<<"Введите время, проведенное в пути"<<endl;
     int t;
-    cin>>t;
+    if (!(cin >> t)||(t<=0)) {
+            cout << "Ошибка при вводе скорости" <<endl; 
+            return;}
 
     ofstream fwrite;
     fwrite.open("jets.txt");
-    if(!fwrite.is_open()){
-        cout<<"Не удалось открыть файл"<<endl;
-            return;}
+    if(!fwrite.is_open()) fatal();
         for(int n = 0; n < i; n++){
             if(arr[n].status!=0){
             for(int m = 0; m < j; m++){
@@ -290,10 +316,7 @@ void nm::time(){
             }}
             fwrite << arr[n].model << arr[n].pilot << " " << arr[n].range << " " << arr[n].speed << " " << arr[n].status<< " " << arr[n].time<<" "<< arr[n].x<<" "<<arr[n].y<<" "<<arr[n].timeEnd<< endl;
             
-        }
-
-
-    
+        }   
         fwrite.close();
 }
 }

@@ -41,4 +41,6 @@ void time();
 void array(int i, string f_name, routes*arr);
 void array(int i, string f_name, jets*arr);
 int arr_s(string f_name);
+void fatal();
+void chek(string a);
 }

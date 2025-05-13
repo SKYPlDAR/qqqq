@@ -7,6 +7,9 @@ using namespace std;
 
 int main()
 {
+    chek("jets.txt");
+    chek("routes.txt");
+
     for(;;){
     cout << "Выберите:" << endl << "1.Управление самолетами 2. Управление маршрутами \nЛюбой другой ввод - выход" << endl;
     int choose;
