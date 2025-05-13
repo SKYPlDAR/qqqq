@@ -52,12 +52,11 @@ int main()
         break;
         }
     case 2:{
-        cout << "Выберите:\n 1. Вывести на экран информацию о всех рейсах 2. Поиск 3. Добавить рейс 4. Удалить рейс" << endl;
+        cout << "Выберите:\n1. Вывести на экран информацию о всех рейсах 2. Поиск 3. Добавить рейс 4. Удалить рейс" << endl;
         int chose;
         cin >> chose;
         switch(chose){
         case 1:{
-            cout << "name, start (X,Y), end (X,Y)" << endl;
             display("routes.txt");
             break;
         }

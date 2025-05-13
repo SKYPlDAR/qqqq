@@ -36,10 +36,15 @@ void nm::display(string a){
     bool flag = true;
     int b=0;
     if(a=="jets.txt"){
-        cout << "Модель самолета\t| Имя пилота\t| Маршрут\t| Скорость самолета\t| Статус\t| Время в пути\t| Текущие оординаты\t| Оставшееся время" << endl;}
+        cout << "Модель самолета| Пилот| Путь | Км/ч | Статус  | В пути | Положение(х,у) | Оставшееся время полета" << endl;}
         else {
-        cout << "Название маршрута\t| Координаты начала\t| Координаты конца" << endl;}
+        cout << "Маршрут\t| Начало(x,y)\t| Конец(х,у)" << endl;}
         while (getline(f, line)) {
+            for (char& t : line) {
+                if (t == ' ') {
+                    t = '\t';
+                }
+            }
             cout << b<<". "<<line << endl;
             flag = false;
             b++;
@@ -95,18 +100,22 @@ void nm::delJET(){
     jets arr[i];
     array(i,"jets.txt", arr);
 
-    jets editable;
-    cout << "Enter model, pilot, range, speed ";
-    cin >> editable;
+    int index;
+    cout << "Введите индекс самолета" << endl;
+    if (!(cin >> index)||(index<0)||(index>i)){
+        cout<<"Некорректный ввод"<<endl;
+        return;
+    }
     ofstream fwrite;
     fwrite.open("jets.txt");
     if(!fwrite.is_open()) fatal();
     for(int n = 0; n < i; n++){
-        if((arr[n].model != editable.model) || (arr[n].pilot != editable.pilot) || (arr[n].range != editable.range) || (arr[n].speed != editable.speed)|| (arr[n].status != editable.status)|| (arr[n].time != editable.time)|| (arr[n].x!= editable.x)|| (arr[n].y != editable.y)|| (arr[n].timeEnd != editable.timeEnd)){
+        if(n!=index){
             fwrite << arr[n].model << " " << arr[n].pilot << " " << arr[n].range << " " << arr[n].speed << " " << arr[n].status<< " " << arr[n].time<<" "<<arr[n].x<<" "<<arr[n].y<<" "<<arr[n].timeEnd<< endl;
         }
     }
     fwrite.close();
+
 }
 
 ostream& operator<<(ostream& os, const nm::routes& Routes){
@@ -171,14 +180,17 @@ void nm::delROU(){
     routes arr[i];
     array(i,"routes.txt", arr);
     
-    routes editable;
-    cout << "Enter name, start(x,y), end(x,y)" << endl;
-    cin >> editable;
+    int index;
+    cout << "Введите индекс маршрута" << endl;
+    if (!(cin >> index)||(index<0)||(index>i)){
+        cout<<"Некорректный ввод"<<endl;
+        return;
+    }
     ofstream fwrite;
     fwrite.open("routes.txt");
     if(!fwrite.is_open()) fatal();
     for(int n = 0; n < i; n++){
-        if((arr[n].name != editable.name) || (arr[n].startX != editable.startX) || (arr[n].startY != editable.startY) || (arr[n].endX != editable.endX) || (arr[n].endY != editable.endY)){
+        if((n!=index)){
             fwrite << arr[n].name << " " << arr[n].startX << " " << arr[n].startY << " " << arr[n].endX << " " << arr[n].endY << endl;
         }
     }
@@ -238,14 +250,14 @@ void nm::vylet(){
 
     cout<< "Введите индекс желаемого маршрута для вылета"<<endl;
     int a;
-    if (!(cin >> a)||(a<=0)||(a>=j)) {
+    if (!(cin >> a)||(a<0)||(a>j)) {
             cout << "Данного маршрута не существует" <<endl; 
             return;
         }
 
     cout<<"Введите индекс свободного самолета, отправляемого в путь"<<endl;
     int index;
-    if (!(cin >> index)||(index<=0)||(index>=i)) {
+    if (!(cin >> index)||(index<0)||(index>i)) {
             cout << "Данного самолета не существует" <<endl; 
             return;
         }
