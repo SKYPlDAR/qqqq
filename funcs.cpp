@@ -1,8 +1,7 @@
-#include <iostream>
 #include <fstream>
 #include "Z.h"
 #include <math.h>
-
+                            //exit(EXIT_SUCCESS);
 using namespace std;
 
 ostream& operator<<(ostream& os, const nm::jets& Jets){
@@ -80,26 +79,10 @@ void nm::addJET(){
 }
 
 void nm::delJET(){
-    string line;
-    int i = 0;
-    ifstream fread;
-    fread.open("jets.txt");
-    if(!fread.is_open())
-        return;
-    while(getline(fread, line)){
-        i++;
-    }
+    int i = arr_s("jets.txt");
     jets arr[i];
-    fread.close();
-    fread.open("jets.txt");
-    if(!fread.is_open())
-        return;
-    jets editable2;
-    for(int n = 0; n < i; n++){
-        fread >> editable2;
-        arr[n] = editable2;
-    }
-    fread.close();
+    array(i,"jets.txt", arr);
+
     jets editable;
     cout << "Enter model, pilot, range, speed ";
     cin >> editable;
@@ -155,26 +138,10 @@ void nm::addROU(){
 }
 
 void nm::delROU(){
-    string line;
-    int i = 0;
-    ifstream fread;
-    fread.open("routes.txt");
-    if(!fread.is_open())
-        return;
-    while(getline(fread, line)){
-        i++;
-    }
+    int i = arr_s("routes.txt");
     routes arr[i];
-    fread.close();
-    fread.open("routes.txt");
-    if(!fread.is_open())
-        return;
-    routes editable2;
-    for(int n = 0; n < i; n++){
-        fread >> editable2;
-        arr[n] = editable2;
-    }
-    fread.close();
+    array(i,"routes.txt", arr);
+    
     routes editable;
     cout << "Enter name, start(x,y), end(x,y)" << endl;
     cin >> editable;
@@ -190,139 +157,64 @@ void nm::delROU(){
     fwrite.close();
 }
 
-/*     Херня с которой начинала эту часть, хз мож чет глянуть надо будет
-
-void nm::peremeshenie(){
-    string line;
+int nm::arr_s(string f_name){
+        string line;
     int i = 0;
     ifstream fread;
-    fread.open("routes.txt");
+    fread.open(f_name);
     if(!fread.is_open())
         return;
     while(getline(fread, line)){
         i++;
     }
-    routes arr[i];
     fread.close();
-    fread.open("routes.txt");
+    return i;
+}
+
+void nm::array(int i, string f_name, routes*arr){
+    ifstream fread;
+    fread.open(f_name);
     if(!fread.is_open())
         return;
-    routes editable2;
+    routes editable;
     for(int n = 0; n < i; n++){
-        fread >> editable2;
-        arr[n] = editable2;
+        fread >> editable;
+        arr[n] = editable;
     }
     fread.close();
+    routes editable;
+    cout << "Enter name, start(x,y), end(x,y)" << endl;
+    cin >> editable;
+}
 
-
-    int n2;
-    cout << "введите номер" << endl;
-    cin >> n2;
-    cout<<"Введите количество прошедших часов"<<endl;
-    int a;
-    cin >> a;
-
-
-    ofstream fwrite;
-    fwrite.open("routes.txt");
-    int c;
-    float c1;
-    c=sqrt(pow(arr[n2].startX-arr[n2].endX,2)+pow(arr[n2].startY-arr[n2].endY,2));
-
-    
-    int n1;
-    cout << "введите номер самолета" << endl;
-    cin >> n1;
-
-
-    string line1;
-    i = 0;
-    ifstream fread1;
-    fread1.open("jets.txt");
-    if(!fread1.is_open())
+void nm::array(int i, string f_name, jets*arr){
+    ifstream fread;
+    fread.open(f_name);
+    if(!fread.is_open())
         return;
-    while(getline(fread1, line1)){
-        i++;
-    }
-    jets arr1[i];
-    fread1.close();
-    fread1.open("jets.txt");
-    if(!fread1.is_open())
-        return;
-    jets editable3;
+    jets editable;
     for(int n = 0; n < i; n++){
-        fread1 >> editable3;
-        arr1[n] = editable3;
+        fread >> editable;
+        arr[n] = editable;
     }
-    fread1.close();
-
-    c1=a*arr1[n1].speed;
-
-    int _x, _y, _l;
-    _x = arr[n2].endX-arr[n2].startX;
-    _y = arr[n2].endY-arr[n2].startY;
-    _l = sqrt(pow(_x,2)+pow(_y,2));
-    _x =_x*c1/_l;
-    _y=_y*c1/_l;
-    c1=c1*100/c;
-    float _t=c/arr1[n1].speed;
-
-    cout<<"На данный момент самолет находится на координате "<< _x<< "  " <<_y<< "И преодолел " << c1<<" % пути на месте будет через "<<_t <<" ч"<<endl;
-    }
-
-    */ 
+    fread.close();
+    jets editable;
+    cout << "Enter name, start(x,y), end(x,y)" << endl;
+    cin >> editable;
+}
 
 void nm::vylet(){
-    string line1;
-    int _i = 0;
-    ifstream fread1;
-    fread1.open("routes.txt");
-    if(!fread1.is_open()){
-    cout<<"Не удалось открыть файл"<<endl;
-        return;}
-    while(getline(fread1, line1)){
-        _i++;
-    }
-    routes arr1[_i];
-    fread1.close();
-    fread1.open("routes.txt");
-    if(!fread1.is_open()){
-    cout<<"Не удалось открыть файл"<<endl;
-        return;}
-    routes editable12;
-    for(int n = 0; n < _i; n++){
-        fread1 >> editable12;
-        arr1[n] = editable12;
-    }
+    int j = arr_s("routes.txt");
+    routes arr1[j];
+    array(j,"routes.txt", arr1);
 
-    fread1.close();
-    cout<< "Введите индекс желаемого маршрута для вылета"<<endl;
-    int _a;
-    cin >>_a;
-    
-
-    string line;
-    int i = 0;
-    ifstream fread;
-    fread.open("jets.txt");
-    if(!fread.is_open()){
-    cout<<"Не удалось открыть файл"<<endl;
-        return;}
-    while(getline(fread, line)){
-        i++;
-    }
+    int i = arr_s("jets.txt");
     jets arr[i];
-    fread.close();
-    fread.open("jets.txt");
-    if(!fread.is_open()){
-    cout<<"Не удалось открыть файл"<<endl;
-        return;}
-    jets editable2;
-    for(int n = 0; n < i; n++){
-        fread >> editable2;
-        arr[n] = editable2;
-    }
-    fread.close();
+    array(i,"jets.txt", arr);
+
+    cout<< "Введите индекс желаемого маршрута для вылета"<<endl;
+    int a;
+    cin >>a;
 
     cout<<"Введите индекс свободного самолета, отправляемого в путь"<<endl;
     int index;
@@ -335,10 +227,10 @@ void nm::vylet(){
     cout<< "Данный самолет уже находится в рейсе" <<endl;
     else {
         arr[index].status=1;
-        arr[index].range=arr1[_a].name;
-        arr[index].x=arr1[_a].startX;
-        arr[index].y=arr1[_a].startY;
-        int c=sqrt(pow(arr1[_a].startX-arr1[_a].endX,2)+pow(arr1[_a].startY-arr1[_a].endY,2));
+        arr[index].range=arr1[a].name;
+        arr[index].x=arr1[a].startX;
+        arr[index].y=arr1[a].startY;
+        int c=sqrt(pow(arr1[a].startX-arr1[a].endX,2)+pow(arr1[a].startY-arr1[a].endY,2));
         arr[index].timeEnd= c/arr[index].speed;
     }
     ofstream fwrite;
@@ -352,49 +244,14 @@ void nm::vylet(){
     fwrite.close();
 }
 
-
 void nm::time(){
-    string line1;
-    int i1 = 0;
-    ifstream fread1;
-    fread1.open("routes.txt");
-    if(!fread1.is_open())
-        return;
-    while(getline(fread1, line1)){
-        i1++;
-    }
-    routes arr1[i1];
-    fread1.close();
-    fread1.open("routes.txt");
-    if(!fread1.is_open())
-        return;
-    routes editable2;
-    for(int n = 0; n < i1; n++){
-        fread1 >> editable2;
-        arr1[n] = editable2;
-    }
-    fread1.close();
+    int j = arr_s("routes.txt");
+    routes arr1[j];
+    array(j,"routes.txt", arr1);
 
-    string line;
-    int i = 0;
-    ifstream fread;
-    fread.open("jets.txt");
-    if(!fread.is_open())
-        return;
-    while(getline(fread, line)){
-        i++;
-    }
+    int i = arr_s("jets.txt");
     jets arr[i];
-    fread.close();
-    fread.open("jets.txt");
-    if(!fread.is_open())
-        return;
-    jets editable3;
-    for(int n = 0; n < i; n++){
-        fread >> editable3;
-        arr[n] = editable3;
-    }
-    fread.close();
+    array(i,"jets.txt", arr);
 
 
     cout<<"Введите время, проведенное в пути"<<endl;
@@ -408,22 +265,19 @@ void nm::time(){
             return;}
         for(int n = 0; n < i; n++){
             if(arr[n].status!=0){
-            for(int n1 = 0; n1 < i1; n1++){
-                if(arr[n].range==arr1[n1].name){
+            for(int m = 0; m < j; m++){
+                if(arr[n].range==arr1[m].name){
             
-
-
         int c, c1, _x, _y, _l;
-        _x = arr1[n1].endX-arr1[n1].startX;
-        _y = arr1[n1].endY-arr1[n1].startY;
-        c=sqrt(pow(_x,2)+pow(_y,2));//длина всего пути
+        _x = arr1[m].endX-arr1[m].startX;
+        _y = arr1[m].endY-arr1[m].startY;
+        c=sqrt(pow(_x,2)+pow(_y,2));//длина всего пути/направляющ вектора
         c1=t*arr[n].speed; //пройден путь за время
-        _l = sqrt(pow(_x,2)+pow(_y,2));//длина направляющего вектора
         int _t=c/arr[n].speed;//требуемое время
         arr[n].time= arr[n].time+t;
         arr[n].timeEnd=_t-t;
-        arr[n].x=_x*c1/_l;
-        arr[n].y=_y*c1/_l;
+        arr[n].x=_x*c1/c;
+        arr[n].y=_y*c1/c;
         if(arr[n].time<=0){
             cout<<"Самолет "<< arr[n].model <<" прибыл в пункт назначения"<<endl;
             arr[n].time=0;
